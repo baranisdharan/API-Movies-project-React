@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -9,7 +9,7 @@ function App() {
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  const fetchMoviesHandler = async () => {
+  const fetchMoviesHandler = useCallback( async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -38,7 +38,11 @@ function App() {
         setError(error.message);
       }
     }
-  };
+  },[]);
+
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
 
   useEffect(() => {
     if (retryCount > 0) {
